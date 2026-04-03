@@ -3,12 +3,11 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>EcoAgenda Pro | DEMO INTERACTIVA</title>
+    <title>EcoAgenda Pro | Demo Oficial</title>
     
-    <!-- LIBRERÍAS CDN -->
+    <!-- LIBRERÍAS -->
     <script src="https://cdn.tailwindcss.com"></script>
     <script defer src="https://unpkg.com/alpinejs@3.x.x/dist/cdn.min.js"></script>
-    <script src="https:// some-cdn.com/lucide.min.js"></script> <!-- Fallback logic below -->
     <script src="https://unpkg.com/lucide@latest"></script>
 
     <script>
@@ -29,536 +28,359 @@
 
     <style type="text/css">
         [x-cloak] { display: none !important; }
-        
         body { 
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background: linear-gradient(rgba(27, 48, 34, 0.8), rgba(27, 48, 34, 0.8)), 
-                        url('https://images.unsplash.com/photo-1441974231531-c6227db76b6e?auto=format&fit=crop&w=1920&q=80');
+            background: #1B3022 url('https://images.unsplash.com/photo-1441974231531-c6227db76b6e?auto=format&fit=crop&w=1920&q=80') no-repeat center center fixed;
             background-size: cover;
-            height: 100vh;
-            margin: 0;
-            overflow: hidden;
+            height: 100vh; margin: 0; overflow: hidden;
         }
-
-        .glass-panel { 
-            background: rgba(255, 255, 255, 0.98); 
-            backdrop-filter: blur(15px); 
-            border-radius: 28px; 
-            box-shadow: 0 15px 35px rgba(0,0,0,0.3); 
-        }
-
+        .glass-panel { background: rgba(255, 255, 255, 0.98); backdrop-filter: blur(15px); border-radius: 28px; box-shadow: 0 15px 35px rgba(0,0,0,0.3); }
         .custom-scroll::-webkit-scrollbar { width: 8px; }
         .custom-scroll::-webkit-scrollbar-thumb { background: #1B3022; border-radius: 10px; }
-        
-        .input-forest { 
-            border: 2px solid #cbd5e1; 
-            border-radius: 14px; 
-            padding: 0.7rem 1rem; 
-            outline: none;
-            transition: all 0.2s;
-            background: white;
-            color: #0f172a;
-            font-weight: 700;
-        }
-        .input-forest:focus { border-color: #1B3022; border-width: 2px; }
-
-        .btn-primary { 
-            background-color: #1B3022; 
-            color: white; 
-            font-weight: 800;
-            transition: all 0.3s; 
-        }
+        .input-forest { border: 2px solid #cbd5e1; border-radius: 14px; padding: 0.7rem 1rem; outline: none; font-weight: 700; }
+        .btn-primary { background-color: #1B3022; color: white; font-weight: 800; transition: all 0.3s; }
         .btn-primary:hover { background-color: #2a4a34; transform: translateY(-1px); }
-
-        .volume-container {
-            display: flex;
-            align-items: center;
-            gap: 10px;
-            padding: 5px 15px;
-            border-radius: 50px;
-            background: rgba(255,255,255,0.1);
-        }
-
-        .search-results {
-            position: absolute;
-            top: 100%;
-            left: 0;
-            right: 0;
-            background: white;
-            border: 2px solid #1B3022;
-            border-radius: 12px;
-            max-height: 200px;
-            overflow-y: auto;
-            z-index: 100;
-        }
-
         .day-blocked { background-color: #78350f !important; color: white !important; border-radius: 12px; }
         .day-non-working { background-color: #ef4444 !important; color: white !important; border-radius: 12px; }
-
-        .ficha-label { font-size: 10px; font-weight: 900; color: #94a3b8; text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 4px; display: block; }
-        .ficha-data { font-size: 14px; font-weight: 700; color: #1B3022; }
-        .ficha-card { background: white; padding: 1rem; border-radius: 1rem; border: 1px solid #f1f5f9; }
-        
-        /* Animación para el límite de demo */
-        .demo-alert {
-            animation: pulse-red 2s infinite;
-        }
-        @keyframes pulse-red {
-            0% { box-shadow: 0 0 0 0 rgba(239, 68, 68, 0.7); }
-            70% { box-shadow: 0 0 0 10px rgba(239, 68, 68, 0); }
-            100% { box-shadow: 0 0 0 0 rgba(239, 68, 68, 0); }
-        }
     </style>
 </head>
-<body x-data="forestApp()" x-init="init()" class="antialiased text-slate-900">
+<body x-data="forestApp()">
 
-    <!-- HEADER -->
-    <header class="fixed top-0 w-full z-50 bg-verdeProfundo h-20 flex items-center justify-between px-8 shadow-2xl">
-        <div class="flex items-center gap-4">
-            <img src="https://lh3.googleusercontent.com/d/1GFegJHO_B4yx0UqJYt_mmpD3YCau92tF" class="h-14 w-14 rounded-full border-2 border-verdeLima object-cover shadow-lg" alt="Logo">
-            <div>
-                <h1 class="text-white text-2xl font-black leading-none tracking-tighter">EcoAgenda <span class="text-verdeLima text-xs ml-1">DEMO</span></h1>
-                <div class="flex items-center gap-1 text-verdeLima font-black text-[10px] mt-1 tracking-[0.2em] uppercase">
-                    GESTION.EXCEL
+    <!-- PANTALLA DE BIENVENIDA (Para activar música y Vercel) -->
+    <div x-show="!started" class="fixed inset-0 z-[200] bg-verdeProfundo flex flex-col items-center justify-center text-center p-6">
+        <img src="https://lh3.googleusercontent.com/d/1GFegJHO_B4yx0UqJYt_mmpD3YCau92tF" class="w-32 h-32 rounded-full mb-6 border-4 border-verdeLima shadow-2xl" alt="Logo">
+        <h1 class="text-white text-4xl font-black mb-2 tracking-tighter">ECOAGENDA PRO</h1>
+        <p class="text-verdeLima font-bold mb-8 uppercase tracking-widest">Versión Demo Interactiva</p>
+        <button @click="startApp()" class="bg-verdeLima text-verdeProfundo px-12 py-4 rounded-full font-bold text-lg hover:scale-105 transition-transform shadow-xl">
+            INGRESAR AL SISTEMA
+        </button>
+        <p class="text-white/40 text-xs mt-10">GESTION.EXCEL © 2024</p>
+    </div>
+
+    <!-- APP PRINCIPAL -->
+    <div x-show="started" x-cloak>
+        <!-- HEADER -->
+        <header class="fixed top-0 w-full z-50 bg-verdeProfundo h-20 flex items-center justify-between px-8 shadow-2xl">
+            <div class="flex items-center gap-4">
+                <img src="https://lh3.googleusercontent.com/d/1GFegJHO_B4yx0UqJYt_mmpD3YCau92tF" class="h-14 w-14 rounded-full border-2 border-verdeLima object-cover" alt="Logo">
+                <div>
+                    <h1 class="text-white text-2xl font-black leading-none tracking-tighter">EcoAgenda</h1>
+                    <div class="text-verdeLima font-black text-[10px] mt-1 tracking-[0.2em] uppercase">GESTION.EXCEL</div>
                 </div>
             </div>
-        </div>
 
-        <!-- CONTROL DE MÚSICA -->
-        <div class="volume-container">
-            <button @click="togglePlay()" class="text-white hover:text-verdeLima transition">
-                <template x-if="!isPlaying"><i data-lucide="play" class="w-6 h-6"></i></template>
-                <template x-if="isPlaying"><i data-lucide="pause" class="w-6 h-6"></i></template>
-            </button>
-            <input type="range" min="0" max="1" step="0.05" x-model="volume" @input="updateVolume()" class="w-20 accent-verdeLima cursor-pointer">
-            <div class="flex flex-col">
-                <span class="text-[9px] text-verdeLima font-black uppercase">Música Ambiente</span>
-                <span class="text-[10px] text-white/70 font-bold">Relaxing Forest</span>
+            <div class="flex items-center gap-4 bg-white/10 px-4 py-2 rounded-full">
+                <button @click="togglePlay()" class="text-white hover:text-verdeLima">
+                    <i :data-lucide="isPlaying ? 'pause' : 'play'" class="w-5 h-5"></i>
+                </button>
+                <input type="range" min="0" max="1" step="0.1" x-model="volume" @input="updateVolume()" class="w-16 accent-verdeLima">
+                <span class="text-[10px] text-white font-bold uppercase">Música</span>
             </div>
-        </div>
 
-        <nav class="flex gap-2">
-            <button @click="view = 'agenda'" :class="view === 'agenda' ? 'bg-verdeLima text-verdeProfundo' : 'text-white/70 hover:text-white'" class="px-6 py-2 rounded-full font-bold text-xs transition-all uppercase tracking-widest">Agenda</button>
-            <button @click="view = 'clientes'" :class="view === 'clientes' ? 'bg-verdeLima text-verdeProfundo' : 'text-white/70 hover:text-white'" class="px-6 py-2 rounded-full font-bold text-xs transition-all uppercase tracking-widest">Clientes</button>
-            <button @click="view = 'historial'" :class="view === 'historial' ? 'bg-verdeLima text-verdeProfundo' : 'text-white/70 hover:text-white'" class="px-6 py-2 rounded-full font-bold text-xs transition-all uppercase tracking-widest">Historial</button>
-            <button @click="view = 'config'" :class="view === 'config' ? 'bg-verdeLima text-verdeProfundo' : 'text-white/70 hover:text-white'" class="px-6 py-2 rounded-full font-bold text-xs transition-all uppercase tracking-widest">Configuración</button>
-        </nav>
-    </header>
+            <nav class="flex gap-2">
+                <button @click="view = 'agenda'" :class="view === 'agenda' ? 'bg-verdeLima text-verdeProfundo' : 'text-white/70'" class="px-6 py-2 rounded-full font-bold text-xs uppercase">Agenda</button>
+                <button @click="view = 'clientes'" :class="view === 'clientes' ? 'bg-verdeLima text-verdeProfundo' : 'text-white/70'" class="px-6 py-2 rounded-full font-bold text-xs uppercase">Clientes</button>
+                <button @click="view = 'historial'" :class="view === 'historial' ? 'bg-verdeLima text-verdeProfundo' : 'text-white/70'" class="px-6 py-2 rounded-full font-bold text-xs uppercase">Historial</button>
+            </nav>
+        </header>
 
-    <main class="pt-24 pb-6 px-6 h-screen overflow-hidden">
-
-        <!-- VISTA AGENDA -->
-        <div x-show="view === 'agenda'" x-cloak class="grid grid-cols-12 gap-6 h-full">
-            
-            <!-- Sidebar Izquierdo -->
-            <aside class="col-span-3 flex flex-col gap-4 overflow-y-auto custom-scroll">
-                <!-- Calendario -->
-                <div class="glass-panel p-5">
-                    <div class="flex justify-between items-center mb-4">
-                        <button @click="prevMonth()" class="p-2 hover:bg-gray-100 rounded-full transition">◀</button>
-                        <h3 class="font-black text-sm uppercase text-verdeProfundo" x-text="formatMonth(currentMonth)"></h3>
-                        <button @click="nextMonth()" class="p-2 hover:bg-gray-100 rounded-full transition">▶</button>
-                    </div>
-                    <div class="grid grid-cols-7 text-center text-[10px] font-black text-slate-600 mb-2">
-                        <span>DO</span><span>LU</span><span>MA</span><span>MI</span><span>JU</span><span>VI</span><span>SA</span>
-                    </div>
-                    <div class="grid grid-cols-7 gap-1">
-                        <template x-for="day in calendarDays" :key="day.date || Math.random()">
-                            <button @click="day.date ? selectedDate = day.date : null" 
-                                    :class="{
-                                        'bg-verdeLima text-verdeProfundo shadow-md scale-110 z-10': selectedDate === day.date, 
-                                        'text-slate-300': !day.currentMonth, 
-                                        'text-slate-900 hover:bg-verdeLima/20': day.currentMonth && selectedDate !== day.date,
-                                        'day-blocked': day.isBlocked,
-                                        'day-non-working': day.isNonWorking
-                                    }"
-                                    class="aspect-square flex items-center justify-center rounded-xl text-xs font-black transition-all"
-                                    x-text="day.day"></button>
-                        </template>
-                    </div>
-                    <button @click="goToToday()" class="w-full mt-4 py-2 bg-verdeProfundo text-white rounded-xl text-[10px] font-black uppercase tracking-widest">Ir a Hoy</button>
-                </div>
-
-                <!-- Resumen del Día -->
-                <div class="glass-panel p-6 flex flex-col">
-                    <h3 class="text-xs font-black text-verdeMusgo uppercase mb-4 tracking-widest">Resumen del Día</h3>
-                    <div class="space-y-4 mb-6 border-t border-slate-100 pt-4">
-                        <div class="flex justify-between items-center">
-                            <span class="text-sm text-slate-500 font-bold">Turnos Hoy:</span>
-                            <span class="font-black text-xl text-slate-900" x-text="turnosDelDia().length"></span>
+        <main class="pt-24 pb-6 px-6 h-screen overflow-hidden">
+            <!-- VISTA AGENDA -->
+            <div x-show="view === 'agenda'" class="grid grid-cols-12 gap-6 h-full">
+                <aside class="col-span-3 flex flex-col gap-4">
+                    <div class="glass-panel p-5">
+                        <div class="flex justify-between items-center mb-4">
+                            <button @click="prevMonth()" class="font-bold">◀</button>
+                            <h3 class="font-black text-sm uppercase" x-text="formatMonth(currentMonth)"></h3>
+                            <button @click="nextMonth()" class="font-bold">▶</button>
                         </div>
-                        <div class="flex justify-between items-center">
-                            <span class="text-sm text-slate-500 font-bold">Asistencias:</span>
-                            <span class="font-black text-xl text-green-600" x-text="turnosDelDia().filter(t => t.status === 'asistio').length"></span>
+                        <div class="grid grid-cols-7 gap-1">
+                            <template x-for="day in calendarDays">
+                                <button @click="day.date ? selectedDate = day.date : null" 
+                                        :class="{'bg-verdeLima text-verdeProfundo shadow-md': selectedDate === day.date, 'text-slate-300': !day.currentMonth}"
+                                        class="aspect-square flex items-center justify-center rounded-xl text-xs font-black"
+                                        x-text="day.day"></button>
+                            </template>
                         </div>
                     </div>
-                    
-                    <div class="border-t border-slate-100 pt-4">
-                        <button @click="openBlockModal()" 
-                                :class="isDateBlocked(selectedDate) ? 'border-marronBloqueo text-marronBloqueo' : 'border-red-500 text-red-500'"
-                                class="w-full py-3 bg-white border-2 rounded-2xl font-black text-[10px] uppercase tracking-widest transition hover:bg-slate-50">
-                            <span x-text="isDateBlocked(selectedDate) ? 'GESTIONAR BLOQUEO' : 'BLOQUEAR DÍA'"></span>
-                        </button>
+                    <div class="glass-panel p-6">
+                        <h3 class="text-xs font-black text-verdeMusgo uppercase mb-4">Resumen</h3>
+                        <p class="text-sm font-bold">Turnos: <span x-text="turnosDelDia().length"></span></p>
+                        <p class="text-sm font-bold text-green-600">Asistencias: <span x-text="turnosDelDia().filter(t => t.status === 'asistio').length"></span></p>
                     </div>
-                </div>
-            </aside>
+                </aside>
 
-            <!-- Agenda Principal -->
-            <section class="col-span-9 glass-panel flex flex-col overflow-hidden relative">
-                <div class="p-6 border-b flex justify-between items-center bg-white/50">
-                    <button @click="changeDay(-1)" class="p-3 hover:bg-verdeLima/20 rounded-full transition">◀</button>
-                    <h2 class="text-3xl font-black text-verdeProfundo uppercase tracking-tighter" x-text="formatLongDate(selectedDate)"></h2>
-                    <button @click="changeDay(1)" class="p-3 hover:bg-verdeLima/20 rounded-full transition">▶</button>
-                </div>
-
-                <div class="flex-1 overflow-y-auto p-6 custom-scroll">
-                    <template x-if="isDateNonWorking(selectedDate)">
-                        <div class="h-full flex flex-col items-center justify-center text-center space-y-4">
-                            <h2 class="text-4xl font-black text-red-600 uppercase tracking-tighter">Día No Laboral</h2>
-                            <p class="text-slate-500 font-bold text-lg">Este día está configurado como descanso.</p>
-                        </div>
-                    </template>
-
-                    <template x-if="!isDateNonWorking(selectedDate) && isDateBlocked(selectedDate)">
-                        <div class="h-full flex flex-col items-center justify-center text-center space-y-4">
-                            <h2 class="text-4xl font-black text-marronBloqueo uppercase tracking-tighter">Día Bloqueado</h2>
-                            <p class="text-marronBloqueo font-bold italic text-lg" x-text="'Nota: ' + getBlockData(selectedDate).note"></p>
-                            <button @click="unblockDay(selectedDate)" class="px-10 py-4 bg-marronBloqueo text-white rounded-full font-black text-xs uppercase tracking-widest hover:scale-105 transition shadow-lg">Desbloquear Día</button>
-                        </div>
-                    </template>
-
-                    <template x-if="!isDateNonWorking(selectedDate) && !isDateBlocked(selectedDate)">
+                <section class="col-span-9 glass-panel flex flex-col overflow-hidden">
+                    <div class="p-6 border-b flex justify-between items-center">
+                        <button @click="changeDay(-1)">◀</button>
+                        <h2 class="text-2xl font-black text-verdeProfundo uppercase" x-text="formatLongDate(selectedDate)"></h2>
+                        <button @click="changeDay(1)">▶</button>
+                    </div>
+                    <div class="flex-1 overflow-y-auto p-6 custom-scroll">
                         <div class="space-y-3">
-                            <template x-for="hour in timeSlots" :key="hour">
-                                <div class="flex gap-6 items-center group">
-                                    <span class="w-16 text-sm font-black text-slate-900" x-text="hour"></span>
+                            <template x-for="hour in timeSlots">
+                                <div class="flex gap-6 items-center">
+                                    <span class="w-16 text-sm font-black" x-text="hour"></span>
                                     <div @click="handleSlotClick(hour)"
-                                         :class="getSlotClass(hour)"
-                                         class="flex-1 min-h-[80px] rounded-[22px] border-2 border-slate-200 flex items-center px-6 transition-all duration-300 cursor-pointer relative overflow-hidden">
-                                        
+                                         :class="getTurno(hour) ? 'bg-white border-l-[12px] border-l-verdeLima shadow-md' : 'bg-slate-50 border-2 border-dashed'"
+                                         class="flex-1 min-h-[70px] rounded-2xl flex items-center px-6 cursor-pointer">
                                         <template x-if="getTurno(hour)">
-                                            <div class="flex justify-between items-center w-full">
-                                                <div class="flex items-center gap-4">
-                                                    <div class="w-12 h-12 rounded-2xl bg-verdeProfundo flex items-center justify-center text-white font-black text-lg" x-text="getTurno(hour).clientName[0]"></div>
-                                                    <div>
-                                                        <p class="font-black text-verdeProfundo text-base" x-text="getTurno(hour).clientName"></p>
-                                                        <p class="text-[10px] text-verdeMusgo font-black uppercase tracking-widest" x-text="getTurno(hour).service + ' • ' + formatMoney(getTurno(hour).price)"></p>
-                                                    </div>
+                                            <div class="flex justify-between w-full items-center">
+                                                <div>
+                                                    <p class="font-black text-verdeProfundo" x-text="getTurno(hour).clientName"></p>
+                                                    <p class="text-[10px] uppercase font-bold text-slate-400" x-text="getTurno(hour).service"></p>
                                                 </div>
-                                                <div class="flex items-center gap-3">
-                                                    <select @click.stop @change="updateStatus(getTurno(hour), $event.target.value)" class="text-[10px] font-black border-2 rounded-lg px-2 py-1 outline-none" :class="statusColor(getTurno(hour).status)">
-                                                        <option value="pendiente" :selected="getTurno(hour).status === 'pendiente'">PENDIENTE</option>
-                                                        <option value="asistio" :selected="getTurno(hour).status === 'asistio'">ASISTIÓ</option>
-                                                        <option value="falto" :selected="getTurno(hour).status === 'falto'">FALTÓ</option>
-                                                        <option value="cancelado">CANCELAR</option>
-                                                    </select>
-                                                    <button @click.stop="editTurno(getTurno(hour))" class="p-2 bg-slate-100 hover:bg-verdeLima/30 rounded-lg transition">✏️</button>
-                                                </div>
+                                                <span class="text-xs font-black px-3 py-1 rounded-full" :class="statusColor(getTurno(hour).status)" x-text="getTurno(hour).status"></span>
                                             </div>
                                         </template>
-
                                         <template x-if="!getTurno(hour)">
-                                            <div class="flex justify-between items-center w-full">
-                                                <span class="text-slate-900 text-[10px] font-black uppercase tracking-[0.3em]">Disponible</span>
-                                                <span class="text-verdeProfundo opacity-0 group-hover:opacity-100 transition font-black text-[10px]">+ AGENDAR</span>
-                                            </div>
+                                            <span class="text-slate-300 text-[10px] font-black uppercase">+ Agendar</span>
                                         </template>
                                     </div>
                                 </div>
                             </template>
                         </div>
-                    </template>
-                </div>
-            </section>
-        </div>
-
-        <!-- VISTA CLIENTES -->
-        <div x-show="view === 'clientes'" x-cloak class="glass-panel h-full flex flex-col overflow-hidden">
-            <div class="p-8 border-b flex justify-between items-center bg-white/50">
-                <h2 class="text-2xl font-black text-verdeProfundo uppercase tracking-tighter">Clientes</h2>
-                <div class="flex gap-4">
-                    <input type="text" x-model="searchClient" placeholder="Buscar..." class="input-forest w-80 text-sm shadow-sm">
-                    <button @click="openModalNewClient()" class="btn-primary px-8 py-3 rounded-xl font-black text-[10px] uppercase tracking-widest shadow-lg">+ Nuevo Registro</button>
-                </div>
-            </div>
-            <div class="flex-1 overflow-auto custom-scroll">
-                <table class="w-full text-left border-collapse">
-                    <thead class="bg-slate-50 sticky top-0 z-10">
-                        <tr class="text-[10px] font-black text-slate-600 uppercase tracking-widest">
-                            <th class="px-6 py-5">ID</th>
-                            <th class="px-6 py-5">Cliente</th>
-                            <th class="px-6 py-5">DNI</th>
-                            <th class="px-6 py-5">Teléfono</th>
-                            <th class="px-6 py-5 text-right">Acciones</th>
-                        </tr>
-                    </thead>
-                    <tbody class="divide-y divide-slate-100">
-                        <template x-for="c in filteredClients" :key="c.id">
-                            <tr class="hover:bg-verdeLima/5 transition-colors">
-                                <td class="px-6 py-4 text-xs font-black text-slate-400" x-text="'#' + (c.id + 99)"></td>
-                                <td class="px-6 py-4">
-                                    <div class="flex items-center gap-3">
-                                        <div class="w-10 h-10 rounded-xl bg-verdeMusgo flex items-center justify-center text-white font-black" x-text="c.name[0]"></div>
-                                        <span class="font-black text-verdeProfundo" x-text="c.name"></span>
-                                    </div>
-                                </td>
-                                <td class="px-6 py-4 text-sm font-black text-slate-800" x-text="c.dni || '-'"></td>
-                                <td class="px-6 py-4 text-sm font-black text-slate-800" x-text="c.phone"></td>
-                                <td class="px-6 py-4 text-right flex justify-end gap-2">
-                                    <button @click="viewClientDetail(c.id)" class="bg-verdeLima text-verdeProfundo px-3 py-2 rounded-lg font-black text-[9px] uppercase tracking-widest hover:shadow-md transition">Ficha</button>
-                                    <button @click="openModalEditClient(c)" class="bg-slate-100 text-slate-600 px-3 py-2 rounded-lg font-black text-[9px] uppercase tracking-widest hover:bg-verdeProfundo hover:text-white transition">Editar</button>
-                                    <button @click="deleteClient(c.id)" class="bg-red-100 text-red-600 px-3 py-2 rounded-lg font-black text-[9px] uppercase tracking-widest hover:bg-red-600 hover:text-white transition">Eliminar</button>
-                                </td>
-                            </tr>
-                        </template>
-                    </tbody>
-                </table>
-            </div>
-        </div>
-
-        <!-- VISTA HISTORIAL -->
-        <div x-show="view === 'historial'" x-cloak class="glass-panel h-full flex flex-col overflow-hidden">
-            <div class="p-6 bg-slate-50 border-b grid grid-cols-3 gap-4">
-                <div class="bg-white p-4 rounded-2xl shadow-sm border-l-8 border-verdeProfundo">
-                    <p class="text-[10px] font-black text-slate-500 uppercase tracking-widest">Total Turnos</p>
-                    <p class="text-2xl font-black text-verdeProfundo" x-text="historyStats.total"></p>
-                </div>
-                <div class="bg-white p-4 rounded-2xl shadow-sm border-l-8 border-green-600">
-                    <p class="text-[10px] font-black text-slate-500 uppercase tracking-widest">Cobrado</p>
-                    <p class="text-2xl font-black text-green-600" x-text="formatMoney(historyStats.cobrado)"></p>
-                </div>
-                <div class="bg-white p-4 rounded-2xl shadow-sm border-l-8 border-red-600">
-                    <p class="text-[10px] font-black text-slate-500 uppercase tracking-widest">Faltas</p>
-                    <p class="text-2xl font-black text-red-600" x-text="historyStats.perdidos"></p>
-                </div>
-            </div>
-
-            <div class="flex-1 overflow-y-auto custom-scroll">
-                <table class="w-full text-left">
-                    <thead class="bg-slate-50 sticky top-0 z-10">
-                        <tr class="text-[10px] font-black text-slate-600 uppercase tracking-widest">
-                            <th class="px-8 py-4">Fecha</th>
-                            <th class="px-8 py-4">Cliente</th>
-                            <th class="px-8 py-4">Servicio</th>
-                            <th class="px-8 py-4">Monto</th>
-                            <th class="px-8 py-4">Estado</th>
-                        </tr>
-                    </thead>
-                    <tbody class="divide-y divide-slate-100">
-                        <template x-for="t in filteredHistory" :key="t.id">
-                            <tr>
-                                <td class="px-8 py-4 text-sm font-black text-verdeProfundo" x-text="formatDate(t.date) + ' ' + t.time"></td>
-                                <td class="px-8 py-4 text-sm font-black text-slate-800" x-text="t.clientName"></td>
-                                <td class="px-8 py-4 text-sm text-slate-600 font-bold" x-text="t.service"></td>
-                                <td class="px-8 py-4 text-sm font-black text-slate-900" x-text="formatMoney(t.price)"></td>
-                                <td class="px-8 py-4">
-                                    <span class="px-3 py-1 rounded-full text-[9px] font-black uppercase border-2" :class="statusColor(t.status)" x-text="t.status"></span>
-                                </td>
-                            </tr>
-                        </template>
-                    </tbody>
-                </table>
-            </div>
-        </div>
-
-        <!-- VISTA CONFIGURACIÓN -->
-        <div x-show="view === 'config'" x-cloak class="max-w-4xl mx-auto h-full overflow-y-auto custom-scroll space-y-6 pb-20">
-            <div class="glass-panel p-8">
-                <h2 class="text-xl font-black text-verdeProfundo mb-6 uppercase tracking-tighter border-b-4 border-verdeLima inline-block">Configuración de Demo</h2>
-                <div class="grid grid-cols-2 gap-6">
-                    <div>
-                        <label class="ficha-label">Nombre del Negocio</label>
-                        <input type="text" x-model="config.businessName" class="w-full input-forest">
                     </div>
-                    <div>
-                        <label class="ficha-label">Intervalo de Turnos</label>
-                        <select x-model="config.slotDuration" @change="generateTimeSlots()" class="w-full input-forest">
-                            <option value="30">30 min</option>
-                            <option value="60">1 hora</option>
-                        </select>
+                </section>
+            </div>
+
+            <!-- VISTA CLIENTES -->
+            <div x-show="view === 'clientes'" class="glass-panel h-full flex flex-col overflow-hidden">
+                <div class="p-8 border-b flex justify-between items-center">
+                    <h2 class="text-2xl font-black text-verdeProfundo uppercase">Clientes</h2>
+                    <button @click="openModalNewClient()" class="btn-primary px-6 py-2 rounded-xl text-xs uppercase">+ Nuevo</button>
+                </div>
+                <div class="flex-1 overflow-auto">
+                    <table class="w-full text-left">
+                        <thead class="bg-slate-50">
+                            <tr class="text-[10px] font-black text-slate-500 uppercase">
+                                <th class="p-5">ID</th>
+                                <th class="p-5">Nombre</th>
+                                <th class="p-5">Teléfono</th>
+                                <th class="p-5 text-right">Acciones</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <template x-for="c in clients">
+                                <tr class="border-b border-slate-100">
+                                    <td class="p-5 text-xs font-bold text-slate-400" x-text="'#' + (c.id + 99)"></td>
+                                    <td class="p-5 font-black text-verdeProfundo" x-text="c.name"></td>
+                                    <td class="p-5 text-sm font-bold" x-text="c.phone"></td>
+                                    <td class="p-5 text-right">
+                                        <button @click="deleteClient(c.id)" class="text-red-500 text-xs font-black">ELIMINAR</button>
+                                    </td>
+                                </tr>
+                            </template>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <!-- VISTA HISTORIAL -->
+            <div x-show="view === 'historial'" class="glass-panel h-full flex flex-col overflow-hidden">
+                <div class="p-8 border-b">
+                    <h2 class="text-2xl font-black text-verdeProfundo uppercase">Historial de Cobros</h2>
+                </div>
+                <div class="flex-1 overflow-auto p-8">
+                    <div class="grid grid-cols-2 gap-4 mb-8">
+                        <div class="bg-verdeProfundo p-6 rounded-3xl text-white">
+                            <p class="text-xs font-bold opacity-70 uppercase">Total Recaudado</p>
+                            <p class="text-3xl font-black" x-text="formatMoney(historyStats.cobrado)"></p>
+                        </div>
+                        <div class="bg-verdeLima p-6 rounded-3xl text-verdeProfundo">
+                            <p class="text-xs font-bold opacity-70 uppercase">Turnos Realizados</p>
+                            <p class="text-3xl font-black" x-text="historyStats.total"></p>
+                        </div>
                     </div>
                 </div>
             </div>
-            
-            <!-- AVISO DE DEMO -->
-            <div class="bg-red-600 text-white p-8 rounded-[30px] shadow-xl demo-alert">
-                <h3 class="text-2xl font-black uppercase mb-2">Versión de Prueba</h3>
-                <p class="font-bold opacity-90">Esta demo permite probar todas las funciones. Solo puedes agregar 2 clientes adicionales a los de ejemplo.</p>
-                <button class="mt-4 bg-white text-red-600 px-6 py-2 rounded-full font-black text-xs uppercase">Adquirir Versión Pro</button>
-            </div>
-        </div>
+        </main>
+    </div>
 
-    </main>
-
-    <!-- MODALES -->
-    
     <!-- MODAL AGENDAR -->
-    <div x-show="modalBooking" class="fixed inset-0 z-[100] flex items-center justify-center p-4 bg-verdeProfundo/60 backdrop-blur-md" x-cloak>
-        <div class="bg-white w-full max-w-md rounded-[30px] shadow-2xl p-8" @click.away="modalBooking = false">
-            <h3 class="text-xl font-black text-verdeProfundo mb-6 uppercase tracking-tighter" x-text="editingTurnoId ? 'Editar Turno' : 'Nuevo Turno'"></h3>
+    <div x-show="modalBooking" class="fixed inset-0 z-[150] flex items-center justify-center p-4 bg-verdeProfundo/60 backdrop-blur-md" x-cloak>
+        <div class="bg-white w-full max-w-md rounded-[30px] p-8">
+            <h3 class="text-xl font-black mb-6 uppercase">Nuevo Turno</h3>
             <div class="space-y-4">
                 <div class="relative">
-                    <label class="ficha-label">Buscar Cliente</label>
-                    <input type="text" x-model="clientSearchQuery" @input="showClientResults = true" placeholder="Nombre o DNI..." class="w-full input-forest text-sm">
-                    <div x-show="showClientResults && clientSearchQuery.length > 0" class="search-results custom-scroll">
-                        <template x-for="c in filteredClientsForBooking" :key="c.id">
-                            <div @click="selectClientForBooking(c)" class="p-3 hover:bg-verdeLima/30 cursor-pointer border-b border-slate-100">
-                                <p class="font-black text-verdeProfundo text-sm" x-text="c.name"></p>
-                                <p class="text-[10px] text-slate-500 font-bold" x-text="'DNI: ' + (c.dni || 'Sin DNI')"></p>
-                            </div>
+                    <label class="text-[10px] font-black text-slate-400 uppercase">Buscar Cliente</label>
+                    <input type="text" x-model="clientSearchQuery" @input="showClientResults = true" placeholder="Escribe nombre..." class="w-full input-forest text-sm">
+                    <div x-show="showClientResults && clientSearchQuery.length > 0" class="search-results shadow-xl border">
+                        <template x-for="c in filteredClientsForBooking">
+                            <div @click="selectClientForBooking(c)" class="p-3 hover:bg-verdeLima/20 cursor-pointer font-bold text-sm border-b" x-text="c.name"></div>
                         </template>
                     </div>
                 </div>
                 <div class="grid grid-cols-2 gap-4">
-                    <div>
-                        <label class="ficha-label">Hora</label>
-                        <input type="time" x-model="bookingForm.time" class="w-full input-forest text-sm">
-                    </div>
-                    <div>
-                        <label class="ficha-label">Precio ($)</label>
-                        <input type="number" x-model="bookingForm.price" class="w-full input-forest text-sm">
-                    </div>
+                    <input type="time" x-model="bookingForm.time" class="input-forest">
+                    <input type="number" x-model="bookingForm.price" class="input-forest" placeholder="Precio">
                 </div>
-                <div class="pt-6 flex gap-3">
-                    <button @click="saveBooking()" class="flex-1 btn-primary py-4 rounded-2xl font-black text-xs uppercase tracking-widest">Guardar</button>
-                    <button @click="modalBooking = false" class="px-6 py-4 bg-slate-100 text-slate-500 rounded-2xl font-black text-xs uppercase tracking-widest">Cerrar</button>
-                </div>
+                <button @click="saveBooking()" class="w-full btn-primary py-4 rounded-2xl font-black uppercase">Confirmar Turno</button>
+                <button @click="modalBooking = false" class="w-full text-slate-400 font-bold text-xs uppercase">Cancelar</button>
             </div>
         </div>
     </div>
 
-    <!-- MODAL CLIENTE -->
-    <div x-show="modalClient" class="fixed inset-0 z-[110] flex items-center justify-center p-4 bg-verdeProfundo/60 backdrop-blur-md" x-cloak>
-        <div class="bg-white w-full max-w-lg rounded-[30px] shadow-2xl p-8" @click.away="modalClient = false">
-            <h3 class="text-xl font-black text-verdeProfundo mb-6 uppercase tracking-tighter" x-text="clientForm.id ? 'Editar Cliente' : 'Nuevo Registro'"></h3>
+    <!-- MODAL NUEVO CLIENTE -->
+    <div x-show="modalClient" class="fixed inset-0 z-[150] flex items-center justify-center p-4 bg-verdeProfundo/60 backdrop-blur-md" x-cloak>
+        <div class="bg-white w-full max-w-md rounded-[30px] p-8">
+            <h3 class="text-xl font-black mb-6 uppercase">Registrar Cliente</h3>
             <div class="space-y-4">
-                <div class="grid grid-cols-2 gap-4">
-                    <div>
-                        <label class="ficha-label">Nombre Completo</label>
-                        <input type="text" x-model="clientForm.name" class="w-full input-forest text-sm">
-                    </div>
-                    <div>
-                        <label class="ficha-label">DNI</label>
-                        <input type="text" x-model="clientForm.dni" class="w-full input-forest text-sm">
-                    </div>
+                <input type="text" x-model="clientForm.name" placeholder="Nombre Completo" class="w-full input-forest">
+                <input type="text" x-model="clientForm.phone" placeholder="Teléfono (ej: 549...)" class="w-full input-forest">
+                <div class="bg-red-50 p-4 rounded-2xl border-2 border-red-100">
+                    <p class="text-[10px] text-red-600 font-black uppercase">Aviso de Demo</p>
+                    <p class="text-xs font-bold text-red-800">En esta versión solo puedes agregar 2 clientes nuevos.</p>
                 </div>
-                <div>
-                    <label class="ficha-label">Teléfono</label>
-                    <input type="text" x-model="clientForm.phone" placeholder="549..." class="w-full input-forest text-sm">
-                </div>
-                <div class="pt-6">
-                    <button @click="saveClient()" class="w-full btn-primary py-4 rounded-2xl font-black text-xs uppercase tracking-widest shadow-lg">Registrar Cliente</button>
-                </div>
+                <button @click="saveClient()" class="w-full btn-primary py-4 rounded-2xl font-black uppercase">Guardar Cliente</button>
+                <button @click="modalClient = false" class="w-full text-slate-400 font-bold text-xs uppercase">Cerrar</button>
             </div>
         </div>
     </div>
 
-    <!-- AUDIO -->
+    <!-- AUDIO ELEMENT -->
+    <audio id="bgMusic" loop src="https://files.catbox.moe/mgw7xh.mp3"></audio>
 
     <script>
         function forestApp() {
             return {
+                started: false,
                 view: 'agenda',
                 selectedDate: new Date().toISOString().substr(0, 10),
                 currentMonth: new Date(),
+                isPlaying: false,
+                volume: 0.3,
                 
-                searchClient: '',
+                modalBooking: false,
+                modalClient: false,
                 clientSearchQuery: '',
                 showClientResults: false,
 
-                modalBooking: false,
-                modalClient: false,
-                modalFicha: false,
-                modalBlock: false,
-                editingTurnoId: null,
-                
-                volume: 0.3,
-                isPlaying: false,
-
-                config: {
-                    businessName: 'EcoAgenda Demo',
-                    workStart: '08:00',
-                    workEnd: '20:00',
-                    slotDuration: 60,
-                    services: ['Corte Masculino', 'Barba', 'Tratamiento Facial'],
-                    nonWorkingDays: [0] 
-                },
-
-                bookingForm: { clientId: null, time: '', service: 'Corte Masculino', price: 1500 },
-                clientForm: { id: null, name: '', dni: '', phone: '' },
-                
                 clients: [],
                 turnos: [],
-                blockedDays: [], 
-                timeSlots: [],
+                timeSlots: ['08:00', '09:00', '10:00', '11:00', '12:00', '14:00', '15:00', '16:00', '17:00', '18:00', '19:00'],
                 
-                // Lógica de Demo
-                initialClientCount: 0,
+                bookingForm: { clientId: null, time: '', service: 'Servicio General', price: 2000 },
+                clientForm: { name: '', phone: '' },
 
                 init() {
-                    // Cargar datos de localStorage o usar ejemplos
-                    const savedClients = localStorage.getItem('eco_demo_clients');
-                    const savedTurnos = localStorage.getItem('eco_demo_turnos');
+                    // Cargar datos o ejemplos
+                    const savedC = localStorage.getItem('eco_demo_v2_c');
+                    const savedT = localStorage.getItem('eco_demo_v2_t');
 
-                    if (savedClients) {
-                        this.clients = JSON.parse(savedClients);
+                    if(savedC) {
+                        this.clients = JSON.parse(savedC);
                     } else {
-                        // DATOS DE EJEMPLO
+                        // DATOS DE EJEMPLO INICIALES
                         this.clients = [
-                            { id: 1, name: 'Juan Pérez', dni: '35123456', phone: '5491122334455' },
-                            { id: 2, name: 'María García', dni: '40987654', phone: '5491166778899' },
-                            { id: 3, name: 'Ricardo Fort', dni: '20111222', phone: '5491100000000' }
+                            { id: 1, name: 'Carlos Sánchez', phone: '54911223344' },
+                            { id: 2, name: 'Ana Martínez', phone: '54911556677' }
                         ];
-                        this.saveToLocal();
                     }
-                    
-                    this.initialClientCount = 3; // Los 3 de ejemplo
 
-                    if (savedTurnos) {
-                        this.turnos = JSON.parse(savedTurnos);
+                    if(savedT) {
+                        this.turnos = JSON.parse(savedT);
                     } else {
                         this.turnos = [
-                            { id: 1, clientId: 1, clientName: 'Juan Pérez', date: this.selectedDate, time: '09:00', service: 'Corte Masculino', price: 1500, status: 'asistio' },
-                            { id: 2, clientId: 2, clientName: 'María García', date: this.selectedDate, time: '11:00', service: 'Tratamiento Facial', price: 3500, status: 'pendiente' }
+                            { id: 101, clientId: 1, clientName: 'Carlos Sánchez', date: this.selectedDate, time: '10:00', service: 'Corte Pro', price: 2500, status: 'asistio' }
                         ];
-                        this.saveToLocal();
                     }
-
-                    this.generateTimeSlots();
-                    lucide.createIcons();
+                    
+                    setTimeout(() => { lucide.createIcons(); }, 500);
                 },
 
-                saveToLocal() {
-                    localStorage.setItem('eco_demo_clients', JSON.stringify(this.clients));
-                    localStorage.setItem('eco_demo_turnos', JSON.stringify(this.turnos));
+                startApp() {
+                    this.started = true;
+                    this.togglePlay();
+                    setTimeout(() => { lucide.createIcons(); }, 100);
                 },
 
-                // --- MÚSICA ---
                 togglePlay() {
                     const audio = document.getElementById('bgMusic');
                     if (audio.paused) {
-                        audio.play();
-                        this.isPlaying = true;
+                        audio.play().then(() => this.isPlaying = true).catch(e => console.log("Error audio"));
                     } else {
                         audio.pause();
                         this.isPlaying = false;
                     }
                 },
+
                 updateVolume() {
                     document.getElementById('bgMusic').volume = this.volume;
                 },
 
-                // --- AGENDA ---
-                generateTimeSlots() {
-                    this.timeSlots = [];
-                    let start = parseInt(this.config.workStart.split(':')[0]);
-                    let end = parseInt(this.config.workEnd.split(':')[0]);
-                    for (let i = start; i < end; i++) {
-                        this.timeSlots.push(`${i.toString().padStart(2, '0')}:00`);
-                        if(this.config.slotDuration == 30) this.timeSlots.push(`${i.toString().padStart(2, '0')}:30`);
-                    }
+                saveToLocal() {
+                    localStorage.setItem('eco_demo_v2_c', JSON.stringify(this.clients));
+                    localStorage.setItem('eco_demo_v2_t', JSON.stringify(this.turnos));
                 },
 
+                // --- LÓGICA DE NEGOCIO ---
+                turnosDelDia() { return this.turnos.filter(t => t.date === this.selectedDate); },
+                getTurno(h) { return this.turnos.find(t => t.date === this.selectedDate && t.time === h); },
+
+                handleSlotClick(h) {
+                    if(this.getTurno(h)) return;
+                    this.bookingForm = { clientId: null, time: h, service: 'Servicio General', price: 2000 };
+                    this.clientSearchQuery = '';
+                    this.modalBooking = true;
+                },
+
+                selectClientForBooking(c) {
+                    this.bookingForm.clientId = c.id;
+                    this.clientSearchQuery = c.name;
+                    this.showClientResults = false;
+                },
+
+                saveBooking() {
+                    if(!this.bookingForm.clientId) return alert("Selecciona un cliente");
+                    const c = this.clients.find(cl => cl.id === this.bookingForm.clientId);
+                    this.turnos.push({
+                        ...this.bookingForm,
+                        id: Date.now(),
+                        clientName: c.name,
+                        date: this.selectedDate,
+                        status: 'pendiente'
+                    });
+                    this.saveToLocal();
+                    this.modalBooking = false;
+                },
+
+                openModalNewClient() {
+                    // LÍMITE DE DEMO: Solo 2 más de los iniciales (Total 4)
+                    if(this.clients.length >= 4) {
+                        alert("LÍMITE DE DEMO: Has alcanzado el máximo de clientes para la versión de prueba. Adquiere la versión completa para registros ilimitados.");
+                        return;
+                    }
+                    this.clientForm = { name: '', phone: '' };
+                    this.modalClient = true;
+                },
+
+                saveClient() {
+                    if(!this.clientForm.name) return;
+                    this.clients.push({ ...this.clientForm, id: Date.now() });
+                    this.saveToLocal();
+                    this.modalClient = false;
+                },
+
+                deleteClient(id) {
+                    this.clients = this.clients.filter(c => c.id !== id);
+                    this.saveToLocal();
+                },
+
+                // --- UTILIDADES ---
+                formatMoney(n) { return new Intl.NumberFormat('es-AR', { style: 'currency', currency: 'ARS' }).format(n); },
+                formatMonth(d) { return new Intl.DateTimeFormat('es-ES', { month: 'long', year: 'numeric' }).format(d); },
+                formatLongDate(d) { return new Date(d + 'T12:00:00').toLocaleDateString('es-ES', { day: 'numeric', month: 'long' }); },
+                prevMonth() { this.currentMonth = new Date(this.currentMonth.setMonth(this.currentMonth.getMonth() - 1)); },
+                nextMonth() { this.currentMonth = new Date(this.currentMonth.setMonth(this.currentMonth.getMonth() + 1)); },
+                changeDay(delta) {
+                    let d = new Date(this.selectedDate + 'T12:00:00');
+                    d.setDate(d.getDate() + delta);
+                    this.selectedDate = d.toISOString().substr(0, 10);
+                },
+                statusColor(s) {
+                    return { pendiente: 'bg-yellow-100 text-yellow-700', asistio: 'bg-green-100 text-green-700', falto: 'bg-red-100 text-red-700' }[s];
+                },
                 get calendarDays() {
                     const year = this.currentMonth.getFullYear();
                     const month = this.currentMonth.getMonth();
@@ -568,115 +390,18 @@
                     for (let i = 0; i < firstDay; i++) days.push({ day: '', date: null, currentMonth: false });
                     for (let i = 1; i <= daysInMonth; i++) {
                         const d = `${year}-${(month + 1).toString().padStart(2, '0')}-${i.toString().padStart(2, '0')}`;
-                        days.push({ day: i, date: d, currentMonth: true, isBlocked: this.isDateBlocked(d), isNonWorking: this.isDateNonWorking(d) });
+                        days.push({ day: i, date: d, currentMonth: true });
                     }
                     return days;
-                },
-
-                turnosDelDia() { return this.turnos.filter(t => t.date === this.selectedDate && t.status !== 'cancelado'); },
-                getTurno(hour) { return this.turnos.find(t => t.date === this.selectedDate && t.time === hour && t.status !== 'cancelado'); },
-
-                handleSlotClick(hour) {
-                    if (this.getTurno(hour)) return;
-                    this.bookingForm = { clientId: null, time: hour, service: this.config.services[0], price: 2000 };
-                    this.clientSearchQuery = '';
-                    this.modalBooking = true;
-                },
-
-                selectClientForBooking(client) {
-                    this.bookingForm.clientId = client.id;
-                    this.clientSearchQuery = client.name;
-                    this.showClientResults = false;
-                },
-
-                saveBooking() {
-                    if (!this.bookingForm.clientId) return alert("Selecciona un cliente");
-                    const client = this.clients.find(c => c.id == this.bookingForm.clientId);
-                    const newTurno = {
-                        ...this.bookingForm,
-                        id: Date.now(),
-                        clientName: client.name,
-                        date: this.selectedDate,
-                        status: 'pendiente'
-                    };
-                    this.turnos.push(newTurno);
-                    this.saveToLocal();
-                    this.modalBooking = false;
-                },
-
-                updateStatus(turno, status) {
-                    turno.status = status;
-                    this.saveToLocal();
-                },
-
-                // --- CLIENTES ---
-                get filteredClients() {
-                    return this.clients.filter(c => c.name.toLowerCase().includes(this.searchClient.toLowerCase()));
-                },
-
-                get filteredClientsForBooking() {
-                    return this.clients.filter(c => c.name.toLowerCase().includes(this.clientSearchQuery.toLowerCase())).slice(0, 5);
-                },
-
-                openModalNewClient() {
-                    // LIMITACIÓN DE DEMO
-                    if (this.clients.length >= (this.initialClientCount + 2)) {
-                        alert("LÍMITE DE DEMO ALCANZADO: En esta versión de prueba solo puedes agregar 2 clientes nuevos. Contacta a GESTION.EXCEL para la versión Pro.");
-                        return;
-                    }
-                    this.clientForm = { id: null, name: '', dni: '', phone: '' };
-                    this.modalClient = true;
-                },
-
-                saveClient() {
-                    if (!this.clientForm.name) return alert("Nombre requerido");
-                    if (this.clientForm.id) {
-                        const idx = this.clients.findIndex(c => c.id === this.clientForm.id);
-                        this.clients[idx] = {...this.clientForm};
-                    } else {
-                        this.clients.push({...this.clientForm, id: Date.now()});
-                    }
-                    this.saveToLocal();
-                    this.modalClient = false;
-                },
-
-                deleteClient(id) {
-                    if(confirm("¿Eliminar cliente?")) {
-                        this.clients = this.clients.filter(c => c.id !== id);
-                        this.saveToLocal();
-                    }
-                },
-
-                // --- UTILIDADES ---
-                formatMoney(n) { return new Intl.NumberFormat('es-AR', { style: 'currency', currency: 'ARS' }).format(n); },
-                formatMonth(d) { return new Intl.DateTimeFormat('es-ES', { month: 'long', year: 'numeric' }).format(d); },
-                formatLongDate(d) { return new Date(d + 'T12:00:00').toLocaleDateString('es-ES', { day: 'numeric', month: 'long', year: 'numeric' }); },
-                formatDate(d) { return d.split('-').reverse().join('/'); },
-                prevMonth() { this.currentMonth = new Date(this.currentMonth.setMonth(this.currentMonth.getMonth() - 1)); },
-                nextMonth() { this.currentMonth = new Date(this.currentMonth.setMonth(this.currentMonth.getMonth() + 1)); },
-                goToToday() { this.selectedDate = new Date().toISOString().substr(0, 10); },
-                changeDay(delta) {
-                    let d = new Date(this.selectedDate + 'T12:00:00');
-                    d.setDate(d.getDate() + delta);
-                    this.selectedDate = d.toISOString().substr(0, 10);
-                },
-                isDateBlocked(d) { return this.blockedDays.includes(d); },
-                isDateNonWorking(d) { return this.config.nonWorkingDays.includes(new Date(d + 'T12:00:00').getDay()); },
-                statusColor(s) {
-                    return { pendiente: 'bg-yellow-100 text-yellow-700', asistio: 'bg-green-100 text-green-700', falto: 'bg-red-100 text-red-700' }[s];
-                },
-                getSlotClass(h) {
-                    return this.getTurno(h) ? 'bg-white border-l-[15px] border-l-verdeLima shadow-md' : 'bg-white/60 hover:bg-white';
                 },
                 get historyStats() {
                     return {
                         total: this.turnos.length,
-                        cobrado: this.turnos.filter(t => t.status === 'asistio').reduce((a, b) => a + b.price, 0),
-                        perdidos: this.turnos.filter(t => t.status === 'falto').length
+                        cobrado: this.turnos.filter(t => t.status === 'asistio').reduce((a, b) => a + b.price, 0)
                     }
                 },
-                get filteredHistory() {
-                    return [...this.turnos].sort((a, b) => b.id - a.id);
+                get filteredClientsForBooking() {
+                    return this.clients.filter(c => c.name.toLowerCase().includes(this.clientSearchQuery.toLowerCase()));
                 }
             }
         }
